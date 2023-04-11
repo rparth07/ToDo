@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TaskType, TaskStatus, TaskPriority } from './Constants';
 import { Task } from './Task';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,9 @@ export class AppComponent {
   faTag = faTag;
   allTasks: Task[] = [
     {
-      name: 'Task1',
-      description: 'This is desc',
+      name: 'Complete main UI components',
+      description:
+        'Would be good if we include every components in design system',
       dueDate: new Date(),
       priority: TaskPriority.HIGH,
       status: TaskStatus.TODO,
@@ -79,29 +81,58 @@ export class AppComponent {
     return 'text-secondary';
   }
 
-  displayAllTasks(event: Event) {
+  displayAllTasks() {
     this.showProperty = TaskType.ALL;
     this.tasksToDisplay = this.allTasks;
   }
 
-  displayToDoTasks(event: Event) {
+  displayToDoTasks() {
     this.showProperty = TaskType.TODO;
     this.tasksToDisplay = this.allTasks.filter(
       (x) => x.status == TaskStatus.TODO
     );
   }
 
-  displayInProgressTasks(event: Event) {
+  displayInProgressTasks() {
     this.showProperty = TaskType.INPROGRESS;
     this.tasksToDisplay = this.allTasks.filter(
       (x) => x.status == TaskStatus.INPROGRESS
     );
   }
 
-  displayCompletedTasks(event: Event) {
+  displayCompletedTasks() {
     this.showProperty = TaskType.COMPLETED;
     this.tasksToDisplay = this.allTasks.filter(
       (x) => x.status == TaskStatus.COMPLETED
     );
+  }
+
+  toggleMarkAsCompleted(taskToComplete: Task) {
+    this.allTasks.map((task, i) => {
+      if (
+        taskToComplete.name === task.name &&
+        taskToComplete.description === task.description &&
+        taskToComplete.dueDate === task.dueDate &&
+        taskToComplete.priority === task.priority &&
+        taskToComplete.status === task.status
+      ) {
+        this.allTasks[i].status != TaskStatus.COMPLETED
+          ? (this.allTasks[i].status = TaskStatus.COMPLETED)
+          : (this.allTasks[i].status = TaskStatus.TODO);
+      }
+    });
+
+    this.showProperty == TaskType.TODO
+      ? this.displayToDoTasks()
+      : this.showProperty == TaskType.INPROGRESS
+      ? this.displayInProgressTasks()
+      : this.showProperty == TaskType.COMPLETED
+      ? this.displayCompletedTasks()
+      : this.displayAllTasks();
+  }
+
+  addTask(f: NgForm) {
+    console.log(f.value); // { first: '', last: '' }
+    console.log(f.valid); // false
   }
 }
