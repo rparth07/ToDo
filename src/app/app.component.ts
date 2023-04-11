@@ -131,8 +131,8 @@ export class AppComponent {
       : this.displayAllTasks();
   }
 
-  addTask(f: NgForm) {
-    console.log(f.value); // { first: '', last: '' }
-    console.log(f.valid); // false
+  addTask(form: NgForm) {
+    let formData: Task = form.value;
+    this.allTasks.push(formData);
   }
 }

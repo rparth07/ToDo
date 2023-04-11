@@ -97,13 +97,44 @@
       </div>
     </div>
   </div>
-  <div class="card text-center m-3 add-task">
-    <form #f="ngForm" (ngSubmit)="addTask(f)" novalidate>
-      <input type="text" name="name" ngModel required #first="ngModel">
-      <input type="text" name="description" ngModel>
-      <input type="date" name="dueDate" ngModel>
-      <input type="text" name="priority" ngModel>
-      <button>Submit</button>
+  <div class="card text-center m-2 ms-0 me-0 p-3 add-task">
+    <form (ngSubmit)="addTask(form)" #form="ngForm">
+      <div class="input-container d-flex flex-column gap-3">
+        <div class="text-input-container d-flex flex-column gap-2">
+          <input
+            class="border-0"
+            type="text"
+            placeholder="task"
+            name="name"
+            ngModel
+            required
+          />
+          <input
+            class="border-0"
+            type="text"
+            placeholder="description"
+            name="description"
+            ngModel
+          />
+        </div>
+        <div class="other-input-container d-flex gap-3">
+          <input class="border-1 due-date" type="date" name="dueDate" ngModel />
+          <input
+            class="border-1"
+            type="text"
+            placeholder="priority"
+            name="priority"
+            ngModel
+          />
+          <!-- <ng-select>
+            <ng-option class="p-2">high</ng-option>
+            <ng-option class="p-2">medium</ng-option>
+            <ng-option class="p-2">low</ng-option>
+          </ng-select> -->
+          <button class="btn btn-dark">Cancel</button>
+          <button class="btn btn-primary">Submit</button>
+        </div>
+      </div>
     </form>
   </div>
 </div>
