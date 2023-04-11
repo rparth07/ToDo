@@ -1,0 +1,73 @@
+<div class="card text-center" style="width: 50rem">
+  <div class="card-header header-container bg-info pb-0">
+    <ul class="nav nav-pills header-tab-group card-header-pills">
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'All' }"
+        (click)="displayAllTasks($event)"
+      >
+        All
+      </li>
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'To Do' }"
+        (click)="displayToDoTasks($event)"
+      >
+        To Do
+      </li>
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'In Progress' }"
+        (click)="displayInProgressTasks($event)"
+      >
+        In Progress
+      </li>
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'Completed' }"
+        (click)="displayCompletedTasks($event)"
+      >
+        Completed
+      </li>
+    </ul>
+  </div>
+  <div class="card-body pb-0">
+    <ul class="ps-0 pb-0 mb-0">
+      <li
+        class="card-text text-start task-item"
+        [ngClass]="last ? 'mb-0 pb-0' : 'task-separator'"
+        *ngFor="let task of tasksToDisplay; let i = index; let last=last"
+      >
+        <!--<fa-icon [icon]="['far', 'square']"></fa-icon>
+        <br />
+        <fa-icon [icon]="['far', 'check-square']"></fa-icon>-->
+        <p class="m-0 mb-2 task-name">{{ task.name }}</p>
+        <p class="task-description m-0 mb-2">{{ task.description }}</p>
+        <div class="d-flex">
+          <p class="me-2">{{ getFormattedDate(task.dueDate) }}</p>
+          <!--<fa-icon [icon]="['far', 'tag']"></fa-icon>-
+
+          <i
+            class="fa-light fa-tag"
+            style="color: #ff0000"
+            *ngIf="task.priority === 'high'"
+          ></i>
+          <i
+            class="fa-light fa-tag"
+            style="color: #ffff00"
+            *ngIf="task.priority === 'medium'"
+          ></i>
+          <i
+            class="fa-light fa-tag"
+            style="color: #00ff37"
+            *ngIf="task.priority === 'low'"
+          ></i> -->
+
+          <p ngClass="{{ getClassFromPriority(task.priority) }}">
+            {{ task.priority.toString() }}
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
