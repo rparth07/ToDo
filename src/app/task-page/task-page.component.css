@@ -1,0 +1,39 @@
+.header-container {
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.header-tab-group > .active {
+  color: #0078ff;
+  border-bottom: 2px solid #0078ff;
+  opacity: 1;
+}
+
+.header-tab-group li {
+  padding: 0.8rem;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.card-body::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.card-body::-webkit-scrollbar-track {
+  border-radius: 5px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.048);
+}
+
+.card-body::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(
+    rgba(1, 95, 183, 0.9732216701) 13%,
+    rgba(1, 95, 183, 0.9732216701) 99%
+  );
+  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+  border-radius: 5px;
+}
+
+.task-container {
+  height: 26rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

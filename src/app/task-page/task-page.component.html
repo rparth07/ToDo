@@ -1,0 +1,39 @@
+<div class="card text-center todo-tasks pb-2">
+  <div class="card-header header-container pb-0">
+    <ul class="nav nav-pills header-tab-group card-header-pills">
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'All' }"
+        (click)="displayAllTasks()"
+      >
+        All
+      </li>
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'To Do' }"
+        (click)="displayToDoTasks()"
+      >
+        To Do
+      </li>
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'In Progress' }"
+        (click)="displayInProgressTasks()"
+      >
+        In Progress
+      </li>
+      <li
+        class="nav-item"
+        [ngClass]="{ active: showProperty == 'Completed' }"
+        (click)="displayCompletedTasks()"
+      >
+        Completed
+      </li>
+    </ul>
+  </div>
+  <div class="card-body pb-0 pt-0 task-container">
+    <app-task-list [taskList]="tasksToDisplay">
+    </app-task-list>
+  </div>
+</div>
+<app-task-modifier> </app-task-modifier>

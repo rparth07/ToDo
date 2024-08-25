@@ -1,0 +1,105 @@
+<div class="card text-center m-2 ms-0 me-0 p-3 add-task">
+  <div
+    *ngIf="!shouldDisplayForm"
+    [@heightAnimation]
+    (click)="displayForm()"
+    class="add-task-button pointer-cursor align-items-center d-flex justify-content-center"
+  >
+    <mat-icon>add_circle</mat-icon>
+    <span> Add Task </span>
+  </div>
+  <span class="overflow-hidden" *ngIf="shouldDisplayForm" [@heightAnimation]>
+    <form (ngSubmit)="upsertTaskInTaskList(form)" #form="ngForm">
+      <div class="input-container d-flex flex-column">
+        <div class="text-input-container d-flex flex-column">
+          <mat-form-field>
+            <mat-label>Task</mat-label>
+            <input
+              matInput
+              type="text"
+              name="name"
+              required
+              [ngModel]="taskToEdit?.name"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              type="textarea"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="4"
+              name="description"
+              [ngModel]="taskToEdit?.description"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <div class="d-flex gap-3 align-items-center justify-content-between">
+          <mat-form-field>
+            <mat-label>Choose Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              name="dueDate"
+              required
+              [ngModel]="taskToEdit?.dueDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Set Priority</mat-label>
+            <mat-select
+              name="priority"
+              [ngModel]="taskToEdit?.priority"
+              required
+            >
+              <mat-option
+                *ngFor="let taskPriority of taskPriorities"
+                [value]="taskPriority"
+              >
+                {{ taskPriority }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Set Status</mat-label>
+            <mat-select
+              name="status"
+              [ngModel]="taskToEdit?.status"
+              required
+            >
+              <mat-option
+                *ngFor="let taskStatusType of taskStatusTypes"
+                [value]="taskStatusType"
+              >
+                {{ taskStatusType }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="control-option d-flex gap-2 justify-content-end">
+          <button
+            (click)="hideForm()"
+            type="button"
+            class="button-width-85 btn btn-dark"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="button-width-85 btn btn-primary"
+            [disabled]="!form.valid"
+          >
+            <span *ngIf="taskToEdit == null">Add</span>
+            <span *ngIf="taskToEdit != null">Update</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </span>
+</div>

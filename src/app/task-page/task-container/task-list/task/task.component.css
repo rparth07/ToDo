@@ -1,0 +1,183 @@
+.text-high {
+  color: white;
+  padding: 1px 15px;
+  border-radius: 10%;
+  background-color: red;
+}
+
+.text-medium {
+  color: white;
+  padding: 1px 15px;
+  border-radius: 10%;
+  background-color: rgb(156, 156, 40);
+}
+
+.text-low {
+  color: white;
+  padding: 1px 15px;
+  border-radius: 10%;
+  background-color: green;
+}
+
+.task-separator {
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.task-name {
+  font-weight: 520;
+  color: #000;
+}
+
+.task-item {
+  font-weight: 300;
+  color: #9e8b8b;
+}
+
+.task-name-completed {
+  font-weight: 300;
+  color: #9e8b8b;
+}
+
+.task-description {
+  opacity: 0.6;
+}
+
+.option-container {
+  float: right;
+  flex-direction: column;
+  justify-content: center;
+  visibility: hidden;
+  display: flex;
+  opacity: 0;
+  transition: all 0.4s;
+}
+
+.task-item:hover > .option-container {
+  opacity: 0.8;
+  visibility: visible;
+}
+
+.edit {
+  color: #0078ff;
+  opacity: 0.3;
+}
+
+.delete {
+  color: red;
+  opacity: 0.3;
+}
+
+.edit:active,
+.delete:active {
+  opacity: 1;
+}
+
+/* .delete-task {
+  transform: translateX(-150%);
+  transition: all 2s;
+  background-color: #fff;
+}
+
+.overlay {
+    position: absolute;
+    top: -90%;
+    left: 100%;
+    background-color: rgba(255, 0, 0, 0.575);
+    overflow: hidden;
+    width: 0;
+    height: 90%;
+    color: transparent;
+}
+
+.delete-task + .overlay {
+  left: -20%;
+  display: flex;
+  position: relative;
+  text-align: center;
+  width: 125%;
+  transition: left 2s ease;
+  animation: slider 3s;
+} */
+
+/* .delete-task {
+  transform: translateX(-150%);
+  transition: all 2s;
+  background-color: #fff;
+  /* position: absolute; 
+}
+
+.delete-task + .overlay {
+  left: 0%;
+  display: flex;
+  /* position: relative; 
+  text-align: center;
+  width: 100%;
+  transition: all 2s ease;
+  animation: slider 3s;
+}
+
+.overlay {
+  position: absolute;
+  /* top: -90%; 
+  left: 100%;
+  background-color: rgba(255, 0, 0, 0.575);
+  overflow: hidden;
+  width: 0;
+  height: 121px;
+  /* color: transparent; 
+} */
+
+@keyframes slider {
+  from {
+    color: transparent;
+  }
+  40%,
+  to {
+    color: white;
+  }
+}
+
+.container {
+  position: relative;
+}
+
+.task-item {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 100%;
+  right: 0;
+  background-color: #ca5b5b;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+  transition: .5s ease;
+}
+
+.delete-task {
+  transform: translateX(-200%);
+  transition: all 2s ease;
+}
+
+.delete-task + .overlay {
+  width: 110%;
+  left: -5%;
+  transition: all 1.5s ease;
+}
+
+.overlay > span {
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}

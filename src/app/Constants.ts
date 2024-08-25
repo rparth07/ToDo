@@ -6,13 +6,13 @@ export enum TaskType {
 }
 
 export enum TaskPriority {
-  HIGH = 'high',
-  MEDIUM = 'medium',
-  LOW = 'low'
+  HIGH = 'High',
+  MEDIUM = 'Medium',
+  LOW = 'Low'
 }
 
 export enum TaskStatus {
-  TODO = 'To do',
+  TODO = 'To Do',
   INPROGRESS = 'In Progress',
   COMPLETED = 'Completed',
 }

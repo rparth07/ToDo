@@ -1,6 +1,7 @@
 import { TaskPriority, TaskStatus } from './Constants';
 
-export interface Task {
+export type Task = {
+  id: number;
   name: String;
   description: String | undefined;
   dueDate: Date;

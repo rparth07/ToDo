@@ -1,0 +1,6 @@
+<div class="task-group ps-0 pb-0 mb-0">
+  <app-task *ngFor="let task of taskList; let i = index; let last = last"
+  [task]="task"
+  [shouldDisplayTaskSeparator]="!last">
+  </app-task>
+</div>
