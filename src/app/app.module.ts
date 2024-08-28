@@ -18,9 +18,15 @@ import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatIconModule} from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { TaskPageComponent } from './task-page/task-page.component';
+import { TaskModifierComponent } from './task-page/task-modifier/task-modifier.component';
+import { TaskListComponent } from './task-page/task-container/task-list/task-list.component';
+import { TaskMenuComponent } from './task-page/task-container/task-menu/task-menu.component';
+import { TaskComponent } from './task-page/task-container/task-list/task/task.component';
+import { TaskStatusComponent } from './task-page/task-container/task-list/task/task-status/task-status.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, TaskPageComponent, TaskModifierComponent, TaskListComponent, TaskMenuComponent, TaskStatusComponent, TaskComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

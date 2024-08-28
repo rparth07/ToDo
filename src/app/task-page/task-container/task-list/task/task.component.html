@@ -1,34 +1,25 @@
 <div class="container">
-  <div
-  class="card-text text-start task-item d-flex pt-3 pb-3 w-100"
-  [ngClass]="!shouldDisplayTaskSeparator ? 'mb-0 pb-0' : 'task-separator'"
-  #taskDiv
->
-  <app-task-status
-    [taskStatus]="task.status"
-    (updateTaskStatusEventEmitter)="updateTaskStatus($event)"
-  >
-  </app-task-status>
-  <!--<fa-icon [icon]="['far', 'square']"></fa-icon>
+  <div class="card-text text-start task-item d-flex pt-3 pb-3 w-100"
+    [ngClass]="!shouldDisplayTaskSeparator ? 'mb-0 pb-0' : 'task-separator'" #taskDiv>
+    <app-task-status [taskStatus]="task.status" (updateTaskStatusEventEmitter)="updateTaskStatus($event)">
+    </app-task-status>
+    <!--<fa-icon [icon]="['far', 'square']"></fa-icon>
             <br />
             <fa-icon [icon]="['far', 'check-square']"></fa-icon>-->
-  <div class="task-detail w-100">
-    <div class="m-0 mb-2 task-name" *ngIf="task.status != 'Completed'">
-      {{ task.name }}
-    </div>
-    <div
-      class="m-0 mb-2 task-name-completed"
-      *ngIf="task.status == 'Completed'"
-    >
-      <del>{{ task.name }}</del>
-    </div>
-    <div class="task-description m-0 mb-2">
-      {{ task?.description }}
-    </div>
-    <div class="d-flex">
-      <div class="me-2">{{ getFormattedDate(task.dueDate) }}</div>
+    <div class="task-detail w-100">
+      <div class="m-0 mb-2 task-name" *ngIf="task.status != 'Completed'">
+        {{ task.name }}
+      </div>
+      <div class="m-0 mb-2 task-name-completed" *ngIf="task.status == 'Completed'">
+        <del>{{ task.name }}</del>
+      </div>
+      <div class="task-description m-0 mb-2">
+        {{ task?.description }}
+      </div>
+      <div class="d-flex">
+        <div class="me-2">{{ getFormattedDate(task.dueDate) }}</div>
 
-      <!--<fa-icon [icon]="['far', 'tag']"></fa-icon>
+        <!--<fa-icon [icon]="['far', 'tag']"></fa-icon>
 
           <i
             class="fa-light fa-tag"
@@ -45,30 +36,20 @@
             style="color: #00ff37"
             *ngIf="task.priority === 'low'"
           ></i> -->
-      <span>&nbsp;|&nbsp;</span>
-      <div ngClass="{{ getClassFromPriority(task.priority) }}">
-        {{ task.priority.toString() }}
-      </div>
-      <span>&nbsp;|&nbsp;</span>
-      <div>
-        {{ task.status.toString() }}
+        <span>&nbsp;|&nbsp;</span>
+        <div ngClass="{{ getClassFromPriority(task.priority) }}">
+          {{ task.priority.toString() }}
+        </div>
+        <span>&nbsp;|&nbsp;</span>
+        <div>
+          {{ task.status.toString() }}
+        </div>
       </div>
     </div>
+    <div class="option-container" *ngIf="displayOptions">
+      <mat-icon (click)="openEditTaskCardModel(task)" class="edit m-1 p-1" matTooltip="Edit">edit</mat-icon>
+      <mat-icon (click)="deleteTaskFromList(task, taskDiv)" class="delete m-1 p-1" matTooltip="Delete">delete</mat-icon>
+    </div>
   </div>
-  <div class="option-container" *ngIf="displayOptions">
-    <mat-icon
-      (click)="openEditTaskCardModel(task)"
-      class="edit m-1 p-1"
-      matTooltip="Edit"
-      >edit</mat-icon
-    >
-    <mat-icon
-      (click)="deleteTaskFromList(task, taskDiv)"
-      class="delete m-1 p-1"
-      matTooltip="Delete"
-      >delete</mat-icon
-    >
-  </div>
-</div>
-<div class="overlay"><span class="m-auto text-center">Task is deleted</span></div>
+  <div class="overlay"><span class="m-auto text-center">Task is deleted</span></div>
 </div>
