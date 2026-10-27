@@ -17,9 +17,9 @@ export class TaskStatusComponent {
   
   //need to change out of todo, inprogress, completed
   toggleMarkAsCompleted() {
-    this.taskStatus = this.taskStatus == TaskStatus.COMPLETED ?
+    const nextStatus = this.taskStatus == TaskStatus.COMPLETED ?
     TaskStatus.TODO : TaskStatus.COMPLETED;
 
-    this.updateTaskStatusEventEmitter.emit(this.taskStatus);
+    this.updateTaskStatusEventEmitter.emit(nextStatus);
   }
 }

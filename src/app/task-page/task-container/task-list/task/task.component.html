@@ -1,6 +1,6 @@
 <div class="container">
   <div class="card-text text-start task-item d-flex pt-3 pb-3 w-100"
-    [ngClass]="!shouldDisplayTaskSeparator ? 'mb-0 pb-0' : 'task-separator'" #taskDiv>
+    [ngClass]="!shouldDisplayTaskSeparator ? 'mb-0 pb-0' : 'task-separator'">
     <app-task-status [taskStatus]="task.status" (updateTaskStatusEventEmitter)="updateTaskStatus($event)">
     </app-task-status>
     <!--<fa-icon [icon]="['far', 'square']"></fa-icon>
@@ -14,9 +14,9 @@
         <del>{{ task.name }}</del>
       </div>
       <div class="task-description m-0 mb-2">
-        {{ task?.description }}
+        {{ task.description }}
       </div>
-      <div class="d-flex">
+      <div class="d-flex flex-wrap">
         <div class="me-2">{{ getFormattedDate(task.dueDate) }}</div>
 
         <!--<fa-icon [icon]="['far', 'tag']"></fa-icon>
@@ -47,9 +47,8 @@
       </div>
     </div>
     <div class="option-container" *ngIf="displayOptions">
-      <mat-icon (click)="openEditTaskCardModel(task)" class="edit m-1 p-1" matTooltip="Edit">edit</mat-icon>
-      <mat-icon (click)="deleteTaskFromList(task, taskDiv)" class="delete m-1 p-1" matTooltip="Delete">delete</mat-icon>
+      <button type="button" class="task-action edit" aria-label="Edit task" (click)="openEditTaskCardModel(task)"><mat-icon>edit</mat-icon></button>
+      <button type="button" class="task-action delete" aria-label="Delete task" (click)="deleteTaskFromList(task)"><mat-icon>delete</mat-icon></button>
     </div>
   </div>
-  <div class="overlay"><span class="m-auto text-center">Task is deleted</span></div>
 </div>

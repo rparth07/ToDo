@@ -3,3 +3,5 @@
   max-height: 1rem;
   max-width: 1rem;
 }
+
+.status-button { background: none; border: 0; padding: 0; min-width: 32px; min-height: 32px; }

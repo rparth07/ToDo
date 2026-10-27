@@ -1,37 +1,43 @@
+<div *ngIf="taskService.error" class="alert alert-danger" role="alert">
+  {{ taskService.error }}
+  <button type="button" class="btn btn-outline-dark btn-sm" (click)="taskService.reloadTasks()">Retry loading saved tasks</button>
+</div>
+<p class="small text-center">Tasks are saved in this browser on this device.</p>
 <div class="card text-center todo-tasks pb-2">
   <div class="card-header header-container pb-0">
     <ul class="nav nav-pills header-tab-group card-header-pills">
       <li
         class="nav-item"
         [ngClass]="{ active: showProperty == 'All' }"
-        (click)="displayAllTasks()"
+        (click)="displayAllTasks()" (keydown.enter)="displayAllTasks()" (keydown.space)="$event.preventDefault(); displayAllTasks()" role="button" tabindex="0" [attr.aria-pressed]="showProperty === 'All'"
       >
         All
       </li>
       <li
         class="nav-item"
         [ngClass]="{ active: showProperty == 'To Do' }"
-        (click)="displayToDoTasks()"
+        (click)="displayToDoTasks()" (keydown.enter)="displayToDoTasks()" (keydown.space)="$event.preventDefault(); displayToDoTasks()" role="button" tabindex="0" [attr.aria-pressed]="showProperty === 'To Do'"
       >
         To Do
       </li>
       <li
         class="nav-item"
         [ngClass]="{ active: showProperty == 'In Progress' }"
-        (click)="displayInProgressTasks()"
+        (click)="displayInProgressTasks()" (keydown.enter)="displayInProgressTasks()" (keydown.space)="$event.preventDefault(); displayInProgressTasks()" role="button" tabindex="0" [attr.aria-pressed]="showProperty === 'In Progress'"
       >
         In Progress
       </li>
       <li
         class="nav-item"
         [ngClass]="{ active: showProperty == 'Completed' }"
-        (click)="displayCompletedTasks()"
+        (click)="displayCompletedTasks()" (keydown.enter)="displayCompletedTasks()" (keydown.space)="$event.preventDefault(); displayCompletedTasks()" role="button" tabindex="0" [attr.aria-pressed]="showProperty === 'Completed'"
       >
         Completed
       </li>
     </ul>
   </div>
   <div class="card-body pb-0 pt-0 task-container">
+    <p *ngIf="!tasksToDisplay.length && !taskService.error" class="p-4" role="status">No tasks in this view.</p>
     <app-task-list [taskList]="tasksToDisplay">
     </app-task-list>
   </div>

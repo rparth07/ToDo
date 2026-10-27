@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TaskPriority, TaskStatus } from 'src/app/Constants';
 import { Task } from 'src/app/Task';
 import { TaskService } from 'src/app/task-page/task.service';
@@ -8,19 +9,22 @@ import { TaskService } from 'src/app/task-page/task.service';
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.css']
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent implements OnInit, OnDestroy {
   @Input() task!: Task;
   @Input() shouldDisplayTaskSeparator: boolean = true;
   
+  private subscription?: Subscription;
   displayOptions: boolean = true;
 
   constructor(private taskService: TaskService) {
   }
 
   ngOnInit(): void {
-    this.taskService.getDisableOptionEventEmitter()
+    this.subscription = this.taskService.getDisableOptionEventEmitter()
       .subscribe(id => this.displayOptions = this.task?.id != id);
   }
+
+  ngOnDestroy(): void { this.subscription?.unsubscribe(); }
 
   getFormattedDate(date: Date): string {
     return date?.toLocaleString('en-GB', {
@@ -44,8 +48,7 @@ export class TaskComponent implements OnInit {
   }
 
   updateTaskStatus(status: TaskStatus) {
-    this.task.status = status;
-    this.taskService.upsertTaskInTaskList(this.task);
+    this.taskService.upsertTaskInTaskList({ ...this.task, status });
   }
   
   //move to service
@@ -54,11 +57,7 @@ export class TaskComponent implements OnInit {
     this.taskService.updateTask(task);
   }
 
-  deleteTaskFromList(task: Task, taskDiv: HTMLDivElement) {
-    taskDiv.classList.add('delete-task');
-    setTimeout(() => {
-      console.log('started');
-      this.taskService.deleteTaskFromList(task);
-    }, 2000);
+  deleteTaskFromList(task: Task) {
+    this.taskService.deleteTaskFromList(task);
   }
 }

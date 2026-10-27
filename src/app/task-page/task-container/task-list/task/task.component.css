@@ -172,3 +172,7 @@
   transform: translate(-50%, -50%);
   white-space: nowrap;
 }
+
+.option-container { visibility: visible; opacity: 1; }
+.task-action { background: none; border: 0; opacity: 1; min-width: 32px; min-height: 32px; padding: 4px; }
+.task-detail { min-width: 0; overflow-wrap: anywhere; }

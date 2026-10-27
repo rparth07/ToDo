@@ -1,162 +1,104 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
-import { TaskPriority, TaskStatus, TaskType } from '../Constants';
+import { EventEmitter, Injectable } from '@angular/core';
+import { TaskPriority, TaskStatus } from '../Constants';
 import { Task } from '../Task';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class TaskService {
+  private readonly storageKey = 'rparth07-todo.tasks.v1';
+  private savedValue: string | null = null;
+  private storageLoaded = false;
+  allTasks: Task[] = [];
+  error = '';
+  editTaskEventEmitter = new EventEmitter<Task>();
+  refreshTaskListEventEmitter = new EventEmitter<string>();
+  disableOptionEventEmitter = new EventEmitter<number | null>();
 
-  @Output() editTaskEventEmitter = new EventEmitter<Task>();
-  @Output() refreshTaskListEventEmitter = new EventEmitter<string>();
-  @Output() disableOptionEventEmitter = new EventEmitter<number | null>();
+  constructor() { this.reloadTasks(); }
 
-  disableOptionForTask(id: number | null) {
-    this.disableOptionEventEmitter.emit(id);
-  }
-
-  getDisableOptionEventEmitter() {
-    return this.disableOptionEventEmitter;
-  }
-
-  updateTask(value: Task) {
-    this.editTaskEventEmitter.emit(value);
-  }
-
-  getEditTaskEventEmitter() {
-    return this.editTaskEventEmitter;
-  }
-
-  allTasks: Task[] = [
-    {
-      id: 1,
-      name: 'Complete main UI components',
-      description:
-        'Would be good if we include every components in design system',
-      dueDate: new Date(),
-      priority: TaskPriority.LOW,
-      status: TaskStatus.TODO,
-      createdDate: new Date()
-    },
-    {
-      id: 2,
-      name: 'Task2',
-      description: 'This is desc',
-      dueDate: new Date(),
-      priority: TaskPriority.LOW,
-      status: TaskStatus.TODO,
-      createdDate: new Date()
-    },
-    {
-      id: 3,
-      name: 'Task3',
-      description: 'This is desc',
-      dueDate: new Date(),
-      priority: TaskPriority.LOW,
-      status: TaskStatus.TODO,
-      createdDate: new Date()
-    },
-    {
-      id: 4,
-      name: 'Task4',
-      description: 'This is desc',
-      dueDate: new Date(),
-      priority: TaskPriority.LOW,
-      status: TaskStatus.INPROGRESS,
-      createdDate: new Date()
-    },
-    {
-      id: 5,
-      name: 'Task5',
-      description: 'This is desc',
-      dueDate: new Date(),
-      priority: TaskPriority.HIGH,
-      status: TaskStatus.COMPLETED,
-      createdDate: new Date()
-    },
-    {
-      id: 6,
-      name: 'Task6',
-      description: 'This is desc',
-      dueDate: new Date(),
-      priority: TaskPriority.HIGH,
-      status: TaskStatus.COMPLETED,
-      createdDate: new Date()
-    },
-  ];
-
-  upsertTaskInTaskList(task: Task) {
-    if (task.id === null) {
-      this.addTaskInTaskList(task);
-    } else {
-      this.updateTaskInTaskList(task);
+  reloadTasks(): boolean {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      const values: unknown = raw === null ? [] : JSON.parse(raw);
+      if (!Array.isArray(values)) { throw new Error('Invalid task data'); }
+      const tasks = values.map(value => this.normalizeTask(value));
+      const ids = tasks.map(task => task.id);
+      if (ids.some(id => id === null) || new Set(ids).size !== ids.length) {
+        throw new Error('Invalid task IDs');
+      }
+      this.allTasks = tasks;
+      this.savedValue = raw;
+      this.storageLoaded = true;
+      this.error = '';
+      this.refreshTaskList();
+      return true;
+    } catch {
+      this.storageLoaded = false;
+      this.error = 'Saved tasks could not be read. Your saved data has not been changed. Check browser storage access, then retry.';
+      return false;
     }
   }
 
-  addTaskInTaskList(taskToAdd: Task) {//need to refactor this function and sorting
-    this.allTasks.sort((a, b) => {
-      if(a.id == null) {
-        return -1;
-      }
-      if(b.id == null)
-      {
-        return 1;
-      }
-      return b.id - a.id;
-    });
-    taskToAdd.id =
-      this.allTasks.length > 0 
-        ? this.allTasks[this.allTasks.length - 1].id
-        : 0;
-    taskToAdd.id = taskToAdd.id == null ? null : ++taskToAdd.id;
-    this.allTasks.push(taskToAdd);
-    this.allTasks.sort((a, b) => {
-      if(a.id == null) {
-        return 1;
-      }
-      if(b.id == null)
-      {
-        return -1;
-      }
-      return a.id - b.id;
-    });
-    this.refreshTaskList();
+  private normalizeTask(value: any): Task {
+    if (!value || typeof value.name !== 'string' || !value.name.trim() ||
+        (value.id !== null && (!Number.isSafeInteger(value.id) || value.id < 1)) ||
+        (value.description != null && typeof value.description !== 'string') ||
+        !Object.values(TaskPriority).includes(value.priority) ||
+        !Object.values(TaskStatus).includes(value.status)) {
+      throw new Error('Invalid task');
+    }
+    const dueDate = new Date(value.dueDate);
+    const createdDate = new Date(value.createdDate);
+    if (value.dueDate == null || value.createdDate == null ||
+        !Number.isFinite(dueDate.getTime()) || !Number.isFinite(createdDate.getTime())) {
+      throw new Error('Invalid date');
+    }
+    return { ...value, name: value.name.trim(), description: value.description ?? undefined, dueDate, createdDate };
   }
 
-  updateTaskInTaskList(taskToUpdate: Task) {
-    this.allTasks.forEach((_) => {
-      if (_.id == taskToUpdate.id) {
-        _.name = taskToUpdate.name;
-        _.description = taskToUpdate.description;
-        _.dueDate = taskToUpdate.dueDate;
-        _.priority = taskToUpdate.priority;
-        _.status = taskToUpdate.status;
+  private save(tasks: Task[]): boolean {
+    if (!this.storageLoaded) { return false; }
+    try {
+      if (localStorage.getItem(this.storageKey) !== this.savedValue) {
+        this.error = 'Tasks changed in another tab. Retry loading saved tasks, then submit your changes again.';
+        return false;
       }
-    });
-
-    this.refreshTaskList();
-  }
-
-  deleteTaskFromList(task: Task) {
-    setTimeout(() => {
-      console.log('started');
-      this.allTasks = this.allTasks.filter((_) => _.id != task.id);
+      const raw = JSON.stringify(tasks);
+      localStorage.setItem(this.storageKey, raw);
+      this.savedValue = raw;
+      this.allTasks = tasks;
+      this.error = '';
       this.refreshTaskList();
-    }, 100);
+      return true;
+    } catch {
+      this.error = 'Changes could not be saved. Your previous tasks and current form are preserved. Check browser storage space and access, then try again.';
+      return false;
+    }
   }
 
-  refreshTaskList() {//trigger event and capture it in task-list
-
-    this.refreshTaskListEventEmitter
-      .emit('task list refreshed');
+  upsertTaskInTaskList(task: Task): boolean {
+    try {
+      const existing = this.allTasks.find(item => item.id === task.id);
+      if (task.id !== null && !existing) { throw new Error('Missing task'); }
+      const id = existing ? existing.id : Math.max(0, ...this.allTasks.map(item => item.id || 0)) + 1;
+      const next = this.normalizeTask({ ...task, id, createdDate: existing?.createdDate || new Date() });
+      return this.save(existing
+        ? this.allTasks.map(item => item.id === id ? next : item)
+        : [...this.allTasks, next]);
+    } catch {
+      this.error = 'Enter a task name, valid due date, priority and status. If this task was removed, cancel editing and add it again.';
+      return false;
+    }
   }
 
-  getRefreshTaskListEventEmitter() {
-    return this.refreshTaskListEventEmitter;
+  addTaskInTaskList(task: Task): boolean { return this.upsertTaskInTaskList({ ...task, id: null }); }
+  updateTaskInTaskList(task: Task): boolean { return this.upsertTaskInTaskList(task); }
+  deleteTaskFromList(task: Task): boolean {
+    return this.save(this.allTasks.filter(item => item.id !== task.id));
   }
-
-  // displayForm() {//trigger event and capture it in task-modifier
-  //   var shouldDisplayForm = true;
-  // }
-
+  disableOptionForTask(id: number | null) { this.disableOptionEventEmitter.emit(id); }
+  getDisableOptionEventEmitter() { return this.disableOptionEventEmitter; }
+  updateTask(task: Task) { this.editTaskEventEmitter.emit({ ...task }); }
+  getEditTaskEventEmitter() { return this.editTaskEventEmitter; }
+  refreshTaskList() { this.refreshTaskListEventEmitter.emit('task list refreshed'); }
+  getRefreshTaskListEventEmitter() { return this.refreshTaskListEventEmitter; }
 }

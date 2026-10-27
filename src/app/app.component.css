@@ -1,7 +1,7 @@
-@import "~bootstrap/dist/css/bootstrap";
+
 
 .todo-container {
-  width: 37.5rem;
+  width: min(37.5rem, 100%);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

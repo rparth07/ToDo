@@ -1,4 +1,4 @@
-<span (click)="toggleMarkAsCompleted()">
+<button type="button" class="status-button" [attr.aria-label]="taskStatus === 'Completed' ? 'Reopen task' : 'Complete task'" [attr.aria-pressed]="taskStatus === 'Completed'" (click)="toggleMarkAsCompleted()">
   <img
     class="task-status-toggle-icon m-2 mt-0"
     *ngIf="taskStatus != 'Completed'"
@@ -11,4 +11,4 @@
     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAQJSURBVHgBvVnNdRMxEB4tLw+Hk+lgqSDuwHYFQAWYCuyccLjYvkDgkqQCQgWECuJUEFMBogOfiHl5sZjRrLL62/XueuF7zz+RtZpPo/lGI0VAU0zVALbQAwF9fPVAQRc/u/o3BWtIQOLvEtt+YMsSTsUSGkDU6j1RXejAGAlMHslUhwQiCrBAsrLqQ9UIErFDmGli7eASKhLdTfCdGuP7vIHHdkECk7ws61RO8ESdFXqN4kzAFX67wXhbwW80eC7W+jfy+DNIdYwCDLDvy8IJCjiHj+IYahHkWPumBw8hgWa+QXKGUBVM1QjfZ/hKIWSxgjsYxsaLEzxRtzjrntPGylzgbM9hH5yoCXp2FvEoKX0IOwnGl1Xia1hHfaWYqhTfr8H3ZmS5E+/BUUCO3N8mOQKPNURbK6edbJOHHfM5uRTCWcnWyREoM/ASfw1sCgylO3hh4tH2oBvAFHP/gtx71dNLyamrD+zJtWWXc24GJsjeGzkDJfUyfiWQna3ODgYTbYNs2aClpkwCuQdn3lByb7X6YIP2ckok8lp/Y1vS6d9hLRiCA2+4BbSNQy+EEiTnrpBrU8CYP6gq4ZmZH9Y4o+fQJqaKyM0tG8fBCpGHn8JPLz8OyYMDp6PS21d7MHt5jniyJ9UK+O60YRmXIKEjr+sNtAUW39wyeIXLOi95Yun8tYUBeTB1Gh+85NkUJq/mSyYxv70tfca3LeAoJHjvqakJYoqFeDFQahsnlwSbdmwQ8kaWlypht2Lj8G0rIrgLxhsdJ8EWgxRr7+ek2A+icdgkzjaTE8pxCF+AvTHQlU4Zqiq2CL5tTHmJzns2DryYVPpUZr4H1cYj6is2xEFQzMokKHmeeIUqG7mAnORZltx9cvUUG4Nvewu/iKCf9/rBg6di4kxEYDwyqeaKjcO1jbVoog88buOrqGKF3til/q6ASZnjaBPFxqDQtotlok/8fj3WCTraVbDpm+q9sy3FUjXvpjxJ3JJs4Auv+yw6CJFUVmy5A+57oPJtLumNCW7AHzgtVOtncQVhaVRfsTY4PaVe6yInyAEdetEIwYer7GaKNfDTE+PSxHG+k2ywkx+LJIRikpPsZqGpYmPpiSDBWiH3XEzLSnnOBh071R7KLCNH6cq/IABcDeu+RkQepHgce60S/sfBXWHYfBJO7IfFwqnusPRaaba3hcKpAxKEwrHCW4WVT46bY+DzwbW+OQ0hocK1WTAe59b45RE5ZINhVPnyyCC+3Az7+o0q4Xvv+o02ft5b+3qHKLp+iyxrdYJMcgTFM2+Oirdl1a6A81z1BtoAee0PjlchPVUjaJATpaojrfNoFhIXeteqkTfrEbTBNeGATl5Yt6XASu9aZNZamQ/ZFXHDf0P8BZMAoyrAi/4RAAAAAElFTkSuQmCC"
     alt="Completed Task"
   />
-</span>
+</button>

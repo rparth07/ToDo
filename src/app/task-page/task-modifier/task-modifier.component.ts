@@ -1,5 +1,6 @@
 import { trigger, transition, style, animate } from '@angular/animations';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Task } from 'src/app/Task';
 import { TaskService } from '../task.service';
 import { NgForm } from '@angular/forms';
@@ -20,7 +21,8 @@ import { NgForm } from '@angular/forms';
   templateUrl: './task-modifier.component.html',
   styleUrls: ['./task-modifier.component.css']
 })
-export class TaskModifierComponent implements OnInit	{
+export class TaskModifierComponent implements OnInit, OnDestroy	{
+  private subscription?: Subscription;
   taskToEdit:Task | null;
   shouldDisplayForm: boolean;
 
@@ -35,7 +37,7 @@ export class TaskModifierComponent implements OnInit	{
   }
 
   ngOnInit(): void {
-    this.taskService.getEditTaskEventEmitter()
+    this.subscription = this.taskService.getEditTaskEventEmitter()
       .subscribe(item => {
         this.taskToEdit = item;
         this.shouldDisplayForm = true;
@@ -44,12 +46,15 @@ export class TaskModifierComponent implements OnInit	{
   }
 
   upsertTaskInTaskList(form: NgForm) {
-    let task: Task = form.value;
+    if (form.invalid || !form.value.name?.trim()) { return; }
+    let task: Task = { ...form.value };
     task.id = this.taskToEdit?.id == undefined ? null : this.taskToEdit.id;
-    this.taskService.upsertTaskInTaskList(task);
+    if (!this.taskService.upsertTaskInTaskList(task)) { return; }
     form.resetForm();
     this.hideForm();
   }
+
+  ngOnDestroy(): void { this.subscription?.unsubscribe(); }
 
   displayForm() {
     this.shouldDisplayForm = true;
